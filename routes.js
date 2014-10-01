@@ -7,13 +7,8 @@
 	var build = function(app, config) {
 
 		app.get(config["render-base"]+"*", function(req, res, next) {
-			app.get("publisher").readPage(1, function(error, results) {
-				var content_ids = results.map(function(id) {
-					return JSON.parse(id);
-				});
-				app.get("db").mget(content_ids, function(error, results) {
-					res.send(results);
-				});
+			app.get("publisher").read_page(1, function(content_items) {
+				res.render("index", {title: "hello world", content: content_items});
 			});
 		});
 

@@ -38,11 +38,18 @@
 		/**
 		 * read a page of published content
 		 */
-		readPage: function(page, callback) {
+		read_page: function(page, callback) {
 			page = (page < 1) ? 1 : page;
 			var start = (page-1)*10;
 			var offset = 10;
-			this.db.zrange(PUBLISHED_LIST, start, offset, callback);
+			var self = this;
+
+			this.db.zrange(PUBLISHED_LIST, start, offset, function(error, ids) {
+				ids = ids.map(JSON.parse);
+				self.db.mget(ids, function(error, results) {
+					callback(results.map(JSON.parse));
+				});
+			});
 		},
 
 		_validate_payload: function(payload) {
@@ -71,7 +78,9 @@
 			var score = 10;
 
 			this.db.zadd(PUBLISHED_LIST, score, payload.id, function(error, results) {
-				self.db.set(payload.id, payload, function() {});
+				self.db.set(payload.id, payload, function() {
+
+				});
 			});
 		},
 

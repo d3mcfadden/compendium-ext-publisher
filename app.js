@@ -6,11 +6,14 @@ var publisher = require("./publisher");
 var db = require("./db");
 
 var app = express();
-var redis = db.redis(config);
+
 app.use(bodyparser.json());
+
+app.set('view engine', 'jade');
+app.set("views", "./views");
 app.set("config", config);
-app.set("publisher", publisher(redis));
-app.set("db", redis);
+app.set("db", db.redis(config));
+app.set("publisher", publisher(app.get("db")));
 
 // build out all routes
 routes.build(app, config);

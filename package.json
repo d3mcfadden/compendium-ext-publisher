@@ -12,6 +12,7 @@
     "express": "4.9.5",
     "body-parser": "",
 	"underscore" : "1.7",
-	"node-redis-client" : "0.0.10"
+	"node-redis-client" : "0.0.10",
+	"jade" : "1.7"
   }
 }
