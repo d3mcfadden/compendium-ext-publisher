@@ -8,8 +8,11 @@ html
             h1 Node Publisher!
 
             each item in content
-                div.item.well.well-sm
-                    h2.title 
-                        a(href='#') #{item.title}
-                    div.body
-                        p #{item.body}
+                div.panel.panel-info
+                    div.panel-heading
+                        span.small.muted #{new Date(item.post_date).toDateString()}
+                        h3.title
+                            a(href='#{url_base}/#{item.id}') #{item.title}
+                        p.author By #{item.author.name}
+                    div.panel-body
+                        p !{item.post_text}

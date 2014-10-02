@@ -3,13 +3,26 @@
 	var _ = require("underscore");
 	var hmac = require("./hmac_middleware");
 	var callback = require("./routes/callback");
+	var render = require("./routes/render");
 
 	var build = function(app, config) {
 
-		app.get(config["render-base"]+"*", function(req, res, next) {
-			app.get("publisher").read_page(1, function(content_items) {
-				res.render("index", {title: "hello world", content: content_items});
-			});
+		var render_base = config["render-base"];
+
+		app.get(render_base+"*", function(req, res, next) {
+			var path = req.path;
+			var index = true;
+			if (index) {
+				app.get("publisher").index(1, function(content_items) {
+					res.render("index", {
+						title: config.title || "hello world",
+						content: content_items,
+						url_base: render_base
+					});
+				});
+			} else {
+				// get item
+			}
 		});
 
 		var handler = new callback(app);

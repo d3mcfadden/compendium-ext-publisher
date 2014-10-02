@@ -1,47 +1,79 @@
 (function() {
 
 	var RedisClient = require("node-redis-client");
+	var _ = require("underscore");
 
-	var RedisWrapper = function(redis) {
-		this.redis = redis;
+	var _callback = function() { };
+
+	PublisherDB = function(conn) {
+		this.conn = conn;
+		this.table = null;
 	};
 
-	RedisWrapper.prototype.get = function(id, callback) {
-		this.redis.call("GET", id, function(error, results) {
-			callback(error, JSON.parse(results));
-		});
-	};
+	_.extend(PublisherDB.prototype, {
 
-	RedisWrapper.prototype.mget = function(ids, callback) {
-		this.redis.call("MGET", ids, callback);
-	};
+		use: function(table) {
+			this.table = table;
+			return this;
+		},
 
-	RedisWrapper.prototype.set = function(key, val, callback) {
-		this.redis.call("SET", key, JSON.stringify(val), callback);
-	};
+		/**
+		 * Insert a doc key into a sorted set, then, if succesful insert the
+		 * complete document using that key
+		 *
+		 * @param id
+		 * @param doc
+		 * @param score
+		 * @param callback
+		 */
+		insert: function(id, doc, score, callback) {
+			var conn = this.conn;
+			conn.call("ZADD", this.table, score, id,
+						function(error, results) {
+							if(!error) {
+								conn.call("SET", id, JSON.stringify(doc), function() {
+									if(_.isFunction(callback)) {
+										callback.apply(this, arguments);
+									}
+								});
+							}
+						});
+		},
 
-	RedisWrapper.prototype.zadd = function(key, score, member, callback) {
-		this.redis.call("ZADD", key, score, JSON.stringify(member), callback);
-	};
+		remove: function(id, callback) {
+			this.conn.call("ZREM", this.table, id, (callback || function(error, results) {
 
-	RedisWrapper.prototype.zrem = function(key, member, callback) {
-		this.redis.call("ZREM", key, member, callback);
-	};
+			}));
+		},
 
-	RedisWrapper.prototype.zrange = function(key, start, end, callback) {
-		this.redis.call("ZRANGE", key, start, end, callback);
-	};
+		update: function(id, payload) {
 
-	RedisWrapper.prototype._call = function() {
-		this.redis.call.apply(this, arguments);
-	};
+		},
+
+		select: function(start, offset, callback) {
+			var conn = this.conn;
+			conn.call("ZRANGE", this.table, start, offset, function(error, ids) {
+				if (ids.length === 0) {
+					return callback([]);
+				}
+				conn.call("MGET", ids, function(error, results) {
+					callback(results.map(JSON.parse));
+				});
+			});
+		}
+
+	});
+
 
 	module.exports = {
+
+		PublisherDB: PublisherDB,
+
 		redis: function(config) {
 			var client = new RedisClient({
 				host: config["redis-host"]
 			});
-			return new RedisWrapper(client);
+			return new PublisherDB(client);
 		}
 	};
 
