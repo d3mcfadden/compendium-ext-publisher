@@ -1,5 +1,6 @@
 (function() {
-var PAYLOADS = {
+
+module.exports = {
 
 	ID: "46cad558-8a60-4fad-9285-0caf7b0f726e",
 
@@ -193,7 +194,5 @@ var PAYLOADS = {
 	}
 
 };
-
-module.exports = PAYLOADS;
 
 })();
