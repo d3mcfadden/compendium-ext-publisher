@@ -1,9 +1,9 @@
 var express = require('express');
 var bodyparser = require("body-parser");
 var config = require("./config");
-var routes = require("./routes");
-var publisher = require("./publisher");
-var db = require("./db");
+var routes = require("./lib/routes");
+var publisher = require("./lib/publisher");
+var db = require("./lib/db");
 
 var app = express();
 
