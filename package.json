@@ -1,18 +1,19 @@
 {
-  "name": "node-publisher",
-  "version": "1.0.0",
-  "description": "Node implementation of Compendium External Publisher Protocol",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Dan McFadden <dan.mcfadden@oracle.com>",
-  "license": "MIT",
-  "dependencies": {
-    "express": "4.9.5",
-    "body-parser": "",
-	"underscore" : "1.7",
-	"node-redis-client" : "0.0.10",
-	"jade" : "1.7"
-  }
+	"name": "node-publisher",
+	"version": "1.0.0",
+	"description": "Node implementation of Compendium External Publisher Protocol",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Dan McFadden <dan.mcfadden@oracle.com>",
+	"license": "MIT",
+	"dependencies": {
+		"express": "4.9.5",
+		"body-parser": "",
+		"underscore" : "1.7",
+		"node-redis-client" : "0.0.10",
+		"jade" : "1.7",
+		"sinon" : ""
+	}
 }
