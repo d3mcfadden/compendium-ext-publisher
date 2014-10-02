@@ -2,7 +2,7 @@ var express = require('express');
 var bodyparser = require("body-parser");
 var config = require("./config");
 var routes = require("./lib/routes");
-var publisher = require("./lib/publisher");
+var Publisher = require("./lib/publisher");
 var db = require("./lib/db");
 
 var app = express();
@@ -13,7 +13,8 @@ app.set('view engine', 'jade');
 app.set("views", "./views");
 app.set("config", config);
 app.set("db", db.redis(config));
-app.set("publisher", publisher(app.get("db")));
+
+app.set("publisher", new Publisher(app.get("db"), app.get("config")));
 
 // build out all routes
 routes.build(app, config);

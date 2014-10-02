@@ -1,0 +1,17 @@
+html
+    head
+        title!= title
+        link(type='text/css', href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css', rel='stylesheet')
+
+    body
+        div.container
+            h1 Node Publisher!
+
+            div.panel.panel-info
+                div.panel-heading
+                    span.small.muted #{new Date(item.publish_date).toDateString()}
+                    h3.title
+                        a(href='#{url_base}/#{item.id}') #{item.title}
+                    p.author By #{item.author.name}
+                div.panel-body
+                    p !{item.post_text}

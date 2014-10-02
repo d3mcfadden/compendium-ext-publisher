@@ -10,7 +10,7 @@ html
             each item in content
                 div.panel.panel-info
                     div.panel-heading
-                        span.small.muted #{new Date(item.post_date).toDateString()}
+                        span.small.muted #{new Date(item.publish_date).toDateString()}
                         h3.title
                             a(href='#{url_base}/#{item.id}') #{item.title}
                         p.author By #{item.author.name}

@@ -1,7 +1,7 @@
 var assert = require("assert");
 var sinon = require("sinon");
 var Payload = require("../lib/payload");
-var publisher = require("../lib/publisher");
+var Publisher = require("../lib/publisher");
 var db = require("../lib/db");
 var PAYLOADS = require("./payloads");
 
@@ -49,7 +49,7 @@ describe("publisher", function() {
 			call: stub
 		};
 		this.db = new db.PublisherDB(this.connection);
-		this.publisher = publisher(this.db);
+		this.publisher = new Publisher(this.db);
 	});
 
 	describe("publishing", function() {
